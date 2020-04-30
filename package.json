@@ -1,0 +1,20 @@
+{
+    "name": "declarations-test-env",
+    "version": "0.1.0",
+    "author": "Max",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/enzyme": "^3.10.5",
+        "@types/jest": "^25.2.1",
+        "jest": "^25.4.0",
+        "enzyme": "^3.11.0",
+        "enzyme-adapter-preact-pure": "^2.2.0",
+        "typescript": "^3.4.3",
+        "ts-jest": "^25.4.0",
+        "devextreme-generator": "^1.0.57",
+        "preact": "10.4.1"
+    },
+    "scripts": {
+      "test": "jest"
+    }
+  }
