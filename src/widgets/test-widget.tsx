@@ -10,15 +10,9 @@ import {
     Ref,
     Slot,
 } from 'devextreme-generator/component_declaration/common';
-import { h } from 'preact';
-
-// const dxClick = {
-//     on: (func: any, arg: any) => void 0,
-//     off: (arg: any) => void 0,
-// };
+import { h } from 'preact'; // we should add this line to setup test environment
 
 export const viewFunction = (viewModel: Widget) => {
-    debugger
     return (
         <div
             ref={viewModel.testRef as any}

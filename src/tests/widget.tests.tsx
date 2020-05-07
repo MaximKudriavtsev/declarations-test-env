@@ -74,6 +74,16 @@ describe('Widget', () => {
             expect(node.prop('prop3')).toBe(false);
             expect(node.prop('className')).toBe('custom-class-name');
         });
+
+        it('should render children', () => {
+            const node = mount((
+                <TestWidgetBase>
+                    <div className="nested-div" />
+                </TestWidgetBase>
+            ));
+
+            expect(node.find('.nested-div').exists()).toBe(true);
+        });
     });
 
     describe('Effects - hooks', () => {
@@ -140,6 +150,7 @@ describe('Widget', () => {
  * we should can render jsx markup with nested components
  * make wrapper with `setState`, `setProps`, `forceUpdate`, `props()`, `state()?` like it enzyme do
  * + call effects after render and update node
+ * + render children
  * emulate click on DOM elements
  * ref with real DOM
  * 
