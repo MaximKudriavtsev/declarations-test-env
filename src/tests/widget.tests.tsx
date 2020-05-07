@@ -36,7 +36,6 @@ describe('Widget', () => {
         });
 
         it('should call effects after `render` method', () => {
-            debugger
             const spy = jest.fn();
             const node = mount(<TestWidgetBase testEvent={spy} />);
             
@@ -83,6 +82,17 @@ describe('Widget', () => {
 
             expect(node.instance().testRef.current.className)
                 .toBe('custom-class-name');
+        });
+        
+        it('should be able to emulate click', () => {
+            const clickHandler = jest.fn();
+            const node = mount(<TestWidgetBase testEvent={clickHandler} />);
+            const div = node.childAt(0);
+
+            expect(clickHandler).toBeCalledTimes(1);
+
+            div.simulate('click');
+            expect(clickHandler).toBeCalledTimes(2);
         });
     });
     

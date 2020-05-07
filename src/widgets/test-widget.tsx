@@ -76,12 +76,7 @@ export default class Widget extends JSXComponent<WidgetProps> {
         const isFocusable = prop1 && !prop2;
 
         if (isFocusable) {
-            // dxClick.on(this.testRef, (e) => {
-            //     e.stopImmediatePropagation();
                 this._focused = true;
-            // });
-
-            // return () => dxClick.off(this.testRef);
         }
 
         return void 0;
@@ -92,6 +87,7 @@ export default class Widget extends JSXComponent<WidgetProps> {
         const { testEvent } = this.props;
 
         testEvent();
+        this.testRef.current.addEventListener('click', () => testEvent());
     }
     
     @Method()

@@ -71,8 +71,8 @@ export const combineDeclarations = (DeclarationClass, view, Props) => {
  * + we should can render jsx markup with nested components
  * + call effects after render and update node
  * + render children
- * ref with real DOM
- * emulate click on DOM elements
+ * + ref with real DOM
+ * + emulate click on DOM elements
  * defaultOptionRules - default properties should be defined
  * make wrapper with `setState`, `setProps`, `forceUpdate`, `props()`, `state()?` like it enzyme do
  * ? we should protect users from the infinite loop while state update
