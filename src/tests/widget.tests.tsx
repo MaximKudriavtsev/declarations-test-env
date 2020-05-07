@@ -84,7 +84,7 @@ describe('Widget', () => {
                 .toBe('custom-class-name');
         });
         
-        it('should be able to emulate click', () => {
+        it('should be able to subscribe event', () => {
             const clickHandler = jest.fn();
             const node = mount(<TestWidgetBase testEvent={clickHandler} />);
             const div = node.childAt(0);
