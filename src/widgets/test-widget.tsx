@@ -1,11 +1,11 @@
 import {
     Component,
     ComponentBindings,
-    Effect,
+    // Effect,
     Event,
     InternalState,
     JSXComponent,
-    Method,
+    // Method,
     OneWay,
     Ref,
     Slot,
@@ -35,6 +35,19 @@ export const viewFunction = (viewModel: Widget) => {
     );
 };
 
+// why we should call decorators? OneWay() instead of OneWay
+const createDecorator = type => () => (target?, propertyKey?, descriptor?) => {
+    target[propertyKey]._decoratorType = type;
+    return descriptor;
+};
+
+// const OneWay = createDecorator('OneWay');
+// const TwoWay = createDecorator('TwoWay');
+// const Slot = createDecorator('Slot');
+// const Event = createDecorator('Event');
+const Effect = createDecorator('Effect');
+const Method = createDecorator('Method');
+
 @ComponentBindings()
 export class WidgetProps {
     @OneWay() prop1?: string | number | null = null;
@@ -42,7 +55,7 @@ export class WidgetProps {
     @OneWay() prop3?: boolean = false;
     @OneWay() prop4?: any = { data: 'prop4' };
     @Slot() children?: any;
-    @Event() testEvent?: () => any;
+    @Event() testEvent?: () => any = () => void 0;
 }
 
 // tslint:disable-next-line: max-classes-per-file
@@ -60,6 +73,7 @@ export default class Widget extends JSXComponent<WidgetProps> {
 
     @Effect()
     testEffect() {
+        debugger
         const { prop1, prop2 } = this.props;
         const isFocusable = prop1 && !prop2;
 
@@ -73,6 +87,13 @@ export default class Widget extends JSXComponent<WidgetProps> {
         }
 
         return void 0;
+    }
+
+    @Effect()
+    mockEffect() {
+        const { testEvent } = this.props;
+
+        testEvent();
     }
     
     @Method()
