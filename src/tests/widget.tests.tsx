@@ -76,58 +76,16 @@ describe('Widget', () => {
             expect(testWidget._focused).toEqual(true);
         });
     });
+
+    describe('Ref with real DOM', () => {
+        it('should create valid Ref object', () => {
+            const node = mount(<TestWidgetBase />);
+
+            expect(node.instance().testRef.current.className)
+                .toBe('custom-class-name');
+        });
+    });
     
     describe('defaultOptionRules - default properties should be defined', () => {
     });
 });
-
-/**
- * Problems
- * 
- * we should protect users from the infinite loop while state update
- * + test-coverage should covers all lines
- * + we should can render simple jsx markup
- * + we should can render jsx markup with nested components
- * make wrapper with `setState`, `setProps`, `forceUpdate`, `props()`, `state()?` like it enzyme do
- * + call effects after render and update node
- * + render children
- * emulate click on DOM elements
- * ref with real DOM
- * 
- * ----
- * Test Declaration
- * 
- * We would like to test widgets common part via declaration and frameworks difference via low count functional tests
- * 
- * Common parts
- *   1. static functions in methods, getters and effects - be sure that methods are defined as a method, and so on
- *   2. default props - be sure that default props from Model are defined
- *   3. props bindings into markup - be sure that necessary properties are bind into markup
- *   4. event subscriptions - be sure that Effects() are defined as Effects and other things are work
- * 
- * Difference parts
- *   1. Effect calls in framework life circle methods - all work fine in complex functional tests for all frameworks
- *   2. Change component state - all work fine in complex functional tests for all frameworks
- *   3. Manipulation with DOM - all work fine in complex functional tests for all frameworks
- * 
- * 
- * Test React Widget
- * 
- * - compiling declarations after each file change
- * - long time file testing
- * 
- * Common parts
- *   1. static functions in methods, getters and effects - we also can test it
- *   2. default props - by test markup
- *   3. props bindings into markup - by test markup
- *   4. event subscriptions - by test markup
- * 
- * Difference parts
- *   1. Effect calls in framework life circle methods - we test only one framework and generator.
- *      If current framework are well and generator test are well too, everything is great!
- *   2. Change component state - we test only one framework and generator.
- *      If current framework are well and generator test are well too, everything is great!
- *   3. Manipulation with DOM - we test only one framework and generator.
- *      If current framework are well and generator test are well too, everything is great!
- * 
- */

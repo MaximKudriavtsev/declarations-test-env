@@ -1,14 +1,7 @@
 import {
     Component,
     ComponentBindings,
-    // Effect,
-    Event,
-    InternalState,
     JSXComponent,
-    // Method,
-    OneWay,
-    Ref,
-    Slot,
 } from 'devextreme-generator/component_declaration/common';
 import WrapperWidget from './test-widget';
 import { h } from 'preact'; // we should add this line to setup test environment

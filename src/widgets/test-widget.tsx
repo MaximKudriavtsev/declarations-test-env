@@ -10,7 +10,7 @@ import {
     Ref,
     Slot,
 } from 'devextreme-generator/component_declaration/common';
-import { h } from 'preact'; // we should add this line to setup test environment
+import { h, createRef } from 'preact'; // we should add this line to setup test environment
 
 export const viewFunction = (viewModel: Widget) => {
     return (
@@ -30,17 +30,22 @@ export const viewFunction = (viewModel: Widget) => {
 };
 
 // why we should call decorators? OneWay() instead of OneWay
-const createDecorator = type => () => (target?, propertyKey?, descriptor?) => {
+const createMethodDecorator = type => () => (target?, propertyKey?, descriptor?) => {
     target[propertyKey]._decoratorType = type;
     return descriptor;
+};
+const createPropertyDecorator = type => () => (target?, propertyKey?) => {
+    target[propertyKey] = createRef();
+    return void 0;
 };
 
 // const OneWay = createDecorator('OneWay');
 // const TwoWay = createDecorator('TwoWay');
 // const Slot = createDecorator('Slot');
 // const Event = createDecorator('Event');
-const Effect = createDecorator('Effect');
-const Method = createDecorator('Method');
+const Effect = createMethodDecorator('Effect');
+const Method = createMethodDecorator('Method');
+const Ref = createPropertyDecorator('Ref');
 
 @ComponentBindings()
 export class WidgetProps {
@@ -67,7 +72,6 @@ export default class Widget extends JSXComponent<WidgetProps> {
 
     @Effect()
     testEffect() {
-        debugger
         const { prop1, prop2 } = this.props;
         const isFocusable = prop1 && !prop2;
 
