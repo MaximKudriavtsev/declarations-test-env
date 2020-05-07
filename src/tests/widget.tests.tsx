@@ -96,6 +96,13 @@ describe('Widget', () => {
         });
     });
     
-    describe('defaultOptionRules - default properties should be defined', () => {
+    describe('Enzyme API', () => {
+        it('setProps should update component', () => {
+            const node = mount(<TestWidgetBase prop1="initial-prop" />);
+            expect(node.find('div').prop('prop1')).toBe('initial-prop');
+            
+            node.setProps({ prop1: 'last-prop' });
+            expect(node.find('div').prop('prop1')).toBe('last-prop');
+        });
     });
 });

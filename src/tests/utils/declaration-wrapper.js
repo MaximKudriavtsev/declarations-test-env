@@ -51,12 +51,12 @@ export const combineDeclarations = (DeclarationClass, view, Props) => {
         }
 
         componentDidMount() {
-            this.props = this._props;
+            this.props = { ...this._props, ...this.props };
             this._effects.forEach((effect) => effect.call(this));
         }
 
         render() {
-            this.props = this._props; // save initial props
+            this.props = { ...this._props, ...this.props }; // save initial props
             return view(this); // can we use preact.h() here? - no, we import h in this file
         }
     }
@@ -73,8 +73,8 @@ export const combineDeclarations = (DeclarationClass, view, Props) => {
  * + render children
  * + ref with real DOM
  * + emulate click on DOM elements
- * defaultOptionRules - default properties should be defined
  * make wrapper with `setState`, `setProps`, `forceUpdate`, `props()`, `state()?` like it enzyme do
+ * ? defaultOptionRules - default properties should be defined | should be tested outside the document
  * ? we should protect users from the infinite loop while state update
  * 
  * ----
