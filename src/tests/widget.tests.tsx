@@ -147,7 +147,7 @@ describe('Widget', () => {
  * we should protect users from the infinite loop while state update
  * + test-coverage should covers all lines
  * + we should can render simple jsx markup
- * we should can render jsx markup with nested components
+ * + we should can render jsx markup with nested components
  * make wrapper with `setState`, `setProps`, `forceUpdate`, `props()`, `state()?` like it enzyme do
  * + call effects after render and update node
  * + render children
