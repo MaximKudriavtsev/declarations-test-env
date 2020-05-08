@@ -1,43 +1,43 @@
 import { Component } from 'preact';
 
-const aggregation = (baseClass, ...mixins) => {
-    class base extends baseClass {
+const copyProps = (target, source) => {  // this function copies all properties and symbols, filtering out some special ones
+    Object.getOwnPropertyNames(source)
+          .concat(Object.getOwnPropertySymbols(source))
+          .forEach((prop) => {
+             if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/))
+                Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop));
+           });
+}
+
+const aggregation = (BaseClass, ...mixins) => {
+    class Base extends BaseClass {
         constructor (...args) {
             super(...args);
-            mixins.forEach((mixin) => {
-                copyProps(this,(new mixin));
+            mixins.forEach((Mixin) => {
+                copyProps(this, (new Mixin));
             });
         }
     }
-    const copyProps = (target, source) => {  // this function copies all properties and symbols, filtering out some special ones
-        Object.getOwnPropertyNames(source)
-              .concat(Object.getOwnPropertySymbols(source))
-              .forEach((prop) => {
-                 if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/))
-                    Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop));
-               })
-    }
-    mixins.forEach((mixin) => { // outside contructor() to allow aggregation(A,B,C).staticFunction() to be called etc.
-        copyProps(base.prototype, mixin.prototype);
-        copyProps(base, mixin);
+    
+    mixins.forEach((Mixin) => { // outside constructor() to allow aggregation(A,B,C).staticFunction() to be called etc.
+        copyProps(Base.prototype, Mixin.prototype);
+        copyProps(Base, Mixin);
     });
-    return base;
+
+    return Base;
 }
 
 export const combineDeclarations = (DeclarationClass, view, Props) => {
-    class Test extends aggregation(DeclarationClass, Component) {
+    return class DeclarationWidget extends aggregation(Component, DeclarationClass) {
         constructor(props = {}) {
             super(props);
 
             const properties = { ...new Props(), ...props };
 
-            this._props = properties; // it needs for render method, because preact remove our initial props;
-            this.props = properties; // it needs for methods
+            this._initialProps = properties; // it needs for render method, because preact remove our initial props;
+            this.props = properties; // it needs for method calls
 
             this._effects = [];
-
-            const a = Object.keys(DeclarationClass.prototype);
-            const b = DeclarationClass;
 
             for (const itemName of Object.getOwnPropertyNames(DeclarationClass.prototype)) {
                 const descriptor = Object.getOwnPropertyDescriptor(DeclarationClass.prototype, itemName);
@@ -51,16 +51,15 @@ export const combineDeclarations = (DeclarationClass, view, Props) => {
         }
 
         componentDidMount() {
-            this.props = { ...this._props, ...this.props };
+            this.props = { ...this._initialProps, ...this.props };
             this._effects.forEach((effect) => effect.call(this));
         }
 
         render() {
-            this.props = { ...this._props, ...this.props }; // save initial props
+            this.props = { ...this._initialProps, ...this.props }; // save initial props
             return view(this); // can we use preact.h() here? - no, we import h in this file
         }
     }
-    return Test;
 };
 
 /**
@@ -73,7 +72,9 @@ export const combineDeclarations = (DeclarationClass, view, Props) => {
  * + render children
  * + ref with real DOM
  * + emulate click on DOM elements
- * make wrapper with `setState`, `setProps`, `forceUpdate`, `props()`, `state()?` like it enzyme do
+ * + `setProps` works
+ * + `props()` works
+ * make wrapper with `setState`, `forceUpdate`, `state()?` like it enzyme do
  * ? defaultOptionRules - default properties should be defined | should be tested outside the document
  * ? we should protect users from the infinite loop while state update
  * 

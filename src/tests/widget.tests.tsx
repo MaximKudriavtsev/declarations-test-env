@@ -37,14 +37,27 @@ describe('Widget', () => {
 
         it('should call effects after `render` method', () => {
             const spy = jest.fn();
-            const node = mount(<TestWidgetBase testEvent={spy} />);
+            mount(<TestWidgetBase testEvent={spy} />);
             
             expect(spy).toBeCalledTimes(1);
         });
     });
 
     describe('Model - necessary props are defined', () => {
-        it('should define props', () => {
+        it('should define props while mounting into DOM', () => {
+            const node = mount(<TestWidgetBase />);
+
+            expect(node.props()).toEqual({
+                prop1: null,
+                prop2: 100,
+                prop3: false,
+                prop4: { data: 'prop4' },
+                children: [],
+                testEvent: expect.any(Function),
+            });
+        });
+
+        it('should define props in new instance of class', () => {
             const testWidget = new TestWidgetBase();
             expect(testWidget.props).toEqual({
                 prop1: null,
@@ -57,18 +70,37 @@ describe('Widget', () => {
         });
     });
 
+    describe('Getters & Methods - we should call getters and methods from mounted widget instance', () => {
+        it('should run simple getter in mounted widget', () => {
+            const node = mount(<TestWidgetBase />);
+            expect(node.instance().testGetter).toEqual({});
+        });
+
+        it('should run simple method in mounted widget', () => {
+            const node = mount(<TestWidgetBase />);
+            expect(node.instance().testMethod()).toEqual({ data: 'prop4' });
+        });
+
+        it('should run method with property update', () => {
+            const node = mount(<TestWidgetBase />);
+            expect(node.instance()._focused).toEqual(false);
+            node.instance().testMethod2();
+            expect(node.instance()._focused).toEqual(true);
+        });
+    });
+
     describe('Getters & Methods - we should call getters and methods from class instance', () => {
         it('should run simple getter', () => {
             const testWidget = new TestWidgetBase();
             expect(testWidget.testGetter).toEqual({});
         });
-        
+
         it('should run simple method', () => {
             const testWidget = new TestWidgetBase();
             expect(testWidget.testMethod()).toEqual({ data: 'prop4' });
         });
-        
-        it('should run method with state update', () => {
+
+        it('should run method with property update', () => {
             const testWidget = new TestWidgetBase();
             expect(testWidget._focused).toEqual(false);
             testWidget.testMethod2();
